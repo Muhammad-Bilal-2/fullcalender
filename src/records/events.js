@@ -1,0 +1,58 @@
+export const events = [
+  {
+    id: 1,
+    resourceId: "d",
+    title: "event 1",
+    start: "2022-06-08",
+    end: "2022-06-10",
+  },
+  {
+    id: 2,
+    resourceId: "c",
+    title: "event 3",
+    start: "2022-06-09T12:00:00+00:00",
+    end: "2022-06-10T06:00:00+00:00",
+  },
+  {
+    id: 3,
+    resourceId: "f",
+    title: "event 4",
+    start: "2022-06-09T07:30:00+00:00",
+    end: "2022-06-09T09:30:00+00:00",
+  },
+  {
+    id: 4,
+    resourceId: "b",
+    title: "event 5",
+    start: "2022-06-09T10:00:00+00:00",
+    end: "2022-06-09T15:00:00+00:00",
+  },
+  {
+    id: 5,
+    resourceId: "e",
+    title: "event 2",
+    start: "2022-06-09T09:00:00+00:00",
+    end: "2022-06-09T14:00:00+00:00",
+  },
+  {
+    id: 6,
+    resourceId: "z",
+    title: "event 2",
+    start: "2022-06-09T09:00:00+00:00",
+    end: "2022-06-09T14:00:00+00:00",
+  },
+  {
+    id: 3,
+    resourceId: "h",
+    title: "event 4",
+    start: "2022-06-09T07:20:00+00:00",
+    end: "2022-06-09T09:30:00+00:00",
+  },
+  {
+    id: 3,
+    resourceId: "j",
+    title: "event 4",
+    start: "2022-06-09T07:00:00+00:00",
+    end: "2022-06-09T09:30:00+00:00",
+  },
+];
