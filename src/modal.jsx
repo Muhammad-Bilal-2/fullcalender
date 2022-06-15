@@ -21,15 +21,15 @@ const Modal = (props) => {
             <br />
             <label>Start Date : </label>
             <input
-              type="date"
+              type="datetime-local"
               name="startdate"
-              defaultValue={
-                props.selectedDate.current && props.selectedDate.current.today
-              }
+              //   defaultValue={
+              //     props.selectedDate.current && props.selectedDate.current.today
+              //   }
             ></input>
             <br />
             <label>End Date : </label>
-            <input type="date" name="enddate"></input>
+            <input type="datetime-local" name="enddate"></input>
             <br />
             <button type="submit">Add</button>
           </form>
