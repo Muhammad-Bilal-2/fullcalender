@@ -116,17 +116,7 @@ function App() {
       cancelButtonText: "Close",
     }).then((result) => {
       if (result.value) {
-        let start =
-          "Thu Jun 16 2022 16:30:00 GMT+0500 (Pakistan Standard Time)";
-        console.log("ll", event.event._instance.range);
-        event.event._instance.range.start = start;
-
-        event.event._instance.range.end =
-          "Thu Jun 16 2022 17:30:00 GMT+0500 (Pakistan Standard Time)";
-        event.el.style.borderColor = "red";
-        console.log(typeof event.event._instance.range.start);
-        console.log("ll", event.event._instance.range);
-        // event.event.remove(); // It will remove event from the calendar
+        event.event.remove(); // It will remove event from the calendar
         Alert.fire("Deleted!", "Your Event has been deleted.", "success");
       }
     });
