@@ -8,16 +8,19 @@ import { resources } from "./records/resources";
 import { events } from "./records/events";
 import Modal from "./modal";
 import { Col, Row } from "react-bootstrap";
+import Alert from "sweetalert2";
 import "./style.css";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 import "bootstrap/dist/css/bootstrap.css";
-
+import { EventModal } from "./EventModal";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 
 function App() {
   const [tableState, setTableState] = useState(events);
   const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [eventData, setEventData] = useState();
   const dateRef = useRef();
   const addEvent = (e) => {
     const newEvent = {
@@ -26,6 +29,7 @@ function App() {
       start: e.target.startdate.value + ":00+00:00",
       end: e.target.enddate.value + ":00+00:00",
       resourceId: "d",
+      // resourceEditable: false, to Preventing shifting between resources
     };
     setTableState((prev) => {
       console.log(...prev);
@@ -63,11 +67,12 @@ function App() {
     );
   };
   useEffect(() => {
-    console.log("n");
     let draggableEl = document.getElementById("external-events");
     new Draggable(draggableEl, {
       itemSelector: ".fc-event",
+      minDistance: 5,
       eventData: function (eventEl) {
+        console.log("drag element ", eventEl);
         let title = eventEl.getAttribute("title");
         let id = eventEl.getAttribute("data");
         return {
@@ -78,6 +83,54 @@ function App() {
     });
   }, []);
 
+  const eventClicked = (event) => {
+    console.log("event", event);
+    Alert.fire({
+      title: event.event.title,
+      html:
+        `<div class="table-responsive">
+      <table class="table">
+      <tbody>
+      <tr >
+      <td>Title</td>
+      <td><strong>` +
+        event.event.title +
+        `</strong></td>
+      </tr>
+      <tr >
+      <td>Start Time</td>
+      <td><strong>
+      ` +
+        event.event.start +
+        `
+      </strong></td>
+      </tr>
+      </tbody>
+      </table>
+      </div>`,
+
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Remove Event",
+      cancelButtonText: "Close",
+    }).then((result) => {
+      if (result.value) {
+        let start =
+          "Thu Jun 16 2022 16:30:00 GMT+0500 (Pakistan Standard Time)";
+        console.log("ll", event.event._instance.range);
+        event.event._instance.range.start = start;
+
+        event.event._instance.range.end =
+          "Thu Jun 16 2022 17:30:00 GMT+0500 (Pakistan Standard Time)";
+        event.el.style.borderColor = "red";
+        console.log(typeof event.event._instance.range.start);
+        console.log("ll", event.event._instance.range);
+        // event.event.remove(); // It will remove event from the calendar
+        Alert.fire("Deleted!", "Your Event has been deleted.", "success");
+      }
+    });
+  };
   return (
     <div className="animated fadeIn p-4 demo-app">
       <Row>
@@ -113,6 +166,14 @@ function App() {
             addEvent={addEvent}
             selectedDate={dateRef}
           />
+          {showModal && (
+            <EventModal
+              show={showModal}
+              onHide={() => setShowModal(false)}
+              event={eventData}
+            />
+          )}
+          ;
           <div className="demo-app-calendar" id="mycalendartest">
             <FullCalendar
               plugins={[
@@ -139,12 +200,15 @@ function App() {
               events={tableState}
               resources={resources}
               dateClick={handleDateClick}
-              eventClick={(e) => console.log(e.event.id)}
+              eventClick={eventClicked}
               editable={true}
-              eventDragStart={(e) => console.log("ee", e)}
+              eventDragStart={(drag) => console.log("drag start ", drag)}
               eventDrop={(drop) => {
-                console.log("drop", drop.oldEvent._instance.range);
-                console.log("drop", drop.oldEvent._def.publicId);
+                // console.log("drop", drop.oldEvent._instance.range);
+                // console.log("drop", drop.oldEvent._def.publicId);
+                // console.log("drop event", drop.revert());
+                setShowModal(true);
+                setEventData(drop);
               }}
               eventResizableFromStart={true}
               eventResize={(resize) => console.log("resize", resize)}
@@ -160,11 +224,17 @@ function App() {
               // }}
               schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
               droppable={true}
-              // eventReceive={(e) => {
-              //   console.log("receive", e);
-              //   console.log("receive", e.event._instance.range);
+              eventReceive={(receive) => {
+                console.log("receive", receive);
+                setShowModal(true);
+                setEventData(receive);
+                // console.log("receive", e.event._instance.range);
+                // e.event.remove();
+              }}
+              // drop={(drop) => {
+              //   // setShowModal(true);
+              //   console.log("external drop", drop);
               // }}
-              drop={(drop) => console.log("drop", drop)}
             />
           </div>
         </Col>
